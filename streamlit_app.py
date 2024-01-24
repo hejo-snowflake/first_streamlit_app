@@ -15,6 +15,7 @@ streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 # import table with data on fruits
 import pandas
 my_fruit_list = pandas.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
+my_fruit_list = my_fruit_list.set_index('Fruit')  # use the Fruit column as the index so that it appears in the selection widget below (instead of just IDs)
 
 # add widget for fruit selection
 streamlit.multiselect("Pick some fruits:", list(my_fruit_list.index))
