@@ -67,16 +67,17 @@ if streamlit.button('Get Fruit Load List'):
     streamlit.dataframe(my_data_rows)
 
 
-# FOR TROUBLESHOOTING: dont't run code after this statement
-streamlit.stop()
+
+# Allow the end user to add fruit to the list, still adds "from streamlit" as fruit
+def insert_row_snowflake(new_fruit):
+    with my_cnx.cursor() as my_cur:
+        my_cur.execute("INSERT INTO fruit_load_list VALUES ('from streamlit')")
+        return 'Thanks for adding ' + new_fruit
+    
+# add button for adding fruit
+add_my_fruit = streamlit.text_input('What fruit would you like to add?')
+if streamlit.button('Add a Fruit to the List'):
+    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    streamlit.text( insert_row_snowflake( add_my_fruit ) )
 
 
-
-
-# Allow the end user to add fruit to the list (not really though, it's just displayed but not added to the DB
-add_my_fruit = streamlit.text_input('What fruit would you like to add?', 'Jackfruit')
-streamlit.write('Thanks for adding ', add_my_fruit)
-
-# Add SQL INSERT statement, this inserts the value 'from streamlit' every time one interacts wtih the app 
-# --> Control of Flow problem since it is ALWAYS added, not just when we want (i.e. when entering a new fruit in the second insert field and hitting enter)
-my_cur.execute("INSERT INTO fruit_load_list VALUES ('from streamlit')")
