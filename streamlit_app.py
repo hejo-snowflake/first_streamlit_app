@@ -54,5 +54,6 @@ streamlit.dataframe(my_data_rows)
 add_my_fruit = streamlit.text_input('What fruit would you like to add?', 'Jackfruit')
 streamlit.write('Thanks for adding ', add_my_fruit)
 
-# Add SQL INSERT statement
+# Add SQL INSERT statement, this inserts the value 'from streamlit' every time one interacts wtih the app 
+# --> Control of Flow problem since it is ALWAYS added, not just when we want (i.e. when entering a new fruit in the second insert field and hitting enter)
 my_cur.execute("INSERT INTO fruit_load_list VALUES ('from streamlit')")
