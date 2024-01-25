@@ -29,17 +29,21 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 streamlit.dataframe(fruits_to_show)
 
 
+# create function for fruityvice website call
+def get_fruityvice_data(this_fruit_choice):
+    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + this_fruit_choice)          # get fruit information from website
+    fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())                            # take the json data and normalize it, i.e. turns it into a proper table
+    return fruityvice_normalized
 
-# New Section to display fruityvice API response, changed such that only part of the code is executed every time a new fruit is entered
+
+# New Section to display fruityvice API response, changed such that only part of the code is executed every time a new fruit is entered, no more default
 streamlit.header("Fruityvice Fruit Advice!")
 try:
   fruit_choice = streamlit.text_input('What fruit would you like information about?')  # added input text field
   if not fruit_choice:
       streamlit.error("Please select a fruit to get information.")
   else:
-      fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)         # get fruit information from website
-      fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())                      # take the json data and normalize it, i.e. turns it into a proper table
-      streamlit.dataframe(fruityvice_normalized)                                                     # output the normalized data as a table
+      streamlit.dataframe( get_fruityvice_data(fruit_choice) )  # output the normalized fruit data as a table
 
 except URLError as e:
   streamlit.error()
